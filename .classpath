@@ -7,7 +7,10 @@
 	</classpathentry>
 	<classpathentry kind="src" path="Kiosk/src"/>
 	<classpathentry kind="src" path="lib"/>
-	<classpathentry exported="true" kind="lib" path="lib/mariadb-java-client-3.3.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/kimkim/Documents/GitHub/kiosk_miniproject/lib/mariadb-java-client-3.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/class5-12/Downloads/mariadb-java-client-2.4.0 (1).jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="Kiosk/out/production/Kiosk"/>
 </classpath>
