@@ -1,0 +1,64 @@
+-- Active 1710837267536@@127.0.0.1@3333@studycafe_kiosk
+CREATE TABLE IF NOT EXISTS members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phoneNumber CHAR(13) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- seat_info 테이블 생성
+-- seat_info 테이블 생성
+CREATE TABLE seat_info (
+    seat_id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(1) NOT NULL,
+    seatnum INT NOT NULL,
+    reserved INT DEFAULT 0
+);
+
+-- 'A' 타입 좌석 추가
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 1);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 2);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 3);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 4);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 5);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 6);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 7);
+INSERT INTO seat_info (type, seatnum) VALUES ('A', 8);
+
+-- 'B' 타입 좌석 추가
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 1);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 2);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 3);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 4);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 5);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 6);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 7);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 8);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 9);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 10);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 11);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 12);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 13);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 14);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 15);
+INSERT INTO seat_info (type, seatnum) VALUES ('B', 16);
+
+-- 'C' 타입 좌석 추가
+INSERT INTO seat_info (type, seatnum) VALUES ('C', 1);
+INSERT INTO seat_info (type, seatnum) VALUES ('C', 2);
+INSERT INTO seat_info (type, seatnum) VALUES ('C', 3);
+INSERT INTO seat_info (type, seatnum) VALUES ('C', 4);
+INSERT INTO seat_info (type, seatnum) VALUES ('C', 5);
+
+
+--스터디룸 테이블
+-- study_rooms 테이블 생성
+CREATE TABLE study_rooms (
+    roomType VARCHAR(20) PRIMARY KEY,
+    remainingRooms INT
+);
+
+-- 데이터 추가
+INSERT INTO study_rooms (roomType, remainingRooms) VALUES ('C_1', 4);
+INSERT INTO study_rooms (roomType, remainingRooms) VALUES ('C_2', 5);
+INSERT INTO study_rooms (roomType, remainingRooms) VALUES ('C_3', 2);
