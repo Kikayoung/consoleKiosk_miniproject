@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.InputMismatchException;
+
 
 public class SeatReservationPage {
     public static void run() {
@@ -11,34 +13,36 @@ public class SeatReservationPage {
         int choice = -1;
 
         while (choice != 0) {
-            System.out.println("\n=== 좌석 예약 ===");
-            System.out.println("1. 1인실 좌석");
-            System.out.println("2. 카페형 좌석");
-            System.out.println("3. 스터디룸");
-            System.out.println("0. 뒤로 가기");
-            System.out.print("선택: ");
-            choice = sc.nextInt();
+        	try {
+	            System.out.println("\n=== 좌석 예약 ===");
+	            System.out.println("1. 1인실 좌석");
+	            System.out.println("2. 카페형 좌석");
+	            System.out.println("3. 스터디룸");
+	            System.out.println("0. 뒤로 가기");
+	            System.out.print("선택: ");
+	            choice = sc.nextInt();
  
-            switch (choice) {
-                case 1:
-                    // 1인실 좌석 정보 표시
-                    seat_present("A", 5000, 8); // 예를 들어 1인실 좌석이 총 8개 있다고 가정
-                    break;
-                case 2:
-                    // 카페형 좌석 정보 표시
-                    seat_present("B", 2000, 16); // 예를 들어 카페형 좌석이 총 16개 있다고 가정
-                    break;
-                case 3:
-                    // 스터디룸 정보 표시
-                    // 스터디룸의 경우, 더 세분화된 선택지 제공이 필요할 수 있으므로 별도의 메소드 호출
-                    // reserveStudyRoom();
-                    seat_present("C", 2000, 16); 
-                    break;
-                case 0:
-                    System.out.println("이전 페이지로 돌아갑니다.");
-                    break;
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+	            switch (choice) {
+	                case 1:
+	                    seat_present("A", 5000, 8);
+	                    break;
+	                case 2:
+	                    seat_present("B", 2000, 16);
+	                    break;
+	                case 3:
+	                    StudyRoomReservePage.run();
+	//                    reserveStudyRoom();
+	//                    seat_present("C", 2000, 5); 
+	                    break;
+	                case 0:
+	                    System.out.println("이전 페이지로 돌아갑니다.");
+	                    break;
+	                default:
+	                    System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+	            }
+        	}catch (InputMismatchException e) {
+	                System.out.println("잘못된 입력입니다. 숫자를 입력하세요.");
+	                sc.next();
             }
         }
     }
@@ -81,12 +85,9 @@ public class SeatReservationPage {
             } else {
                 System.out.print("■   \t");
             }
-            if ((i + 1) % 5 == 0) {
+            if ((i + 1) % 4 == 0) {
                 System.out.println();
-            }
-            if ((i + 1) % 10 == 0) {
-                System.out.println();
-            }
+            }  
         }
         System.out.println("\n■ 표시된 자리는 이미 예약되어 선택이 불가합니다.");
     }
@@ -94,10 +95,25 @@ public class SeatReservationPage {
     public static void reserveSeat(String seatType, int pricePerHour, int totalSeats) {
         Scanner sc = new Scanner(System.in);
         System.out.print("원하는 좌석 번호를 입력하세요 (0 입력 시 뒤로 가기): ");
-        int seatNumber = sc.nextInt();
-        if (seatNumber == 0) {
-            return; // 뒤로 가기
+
+        int seatNumber;
+        try {
+            seatNumber = sc.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("잘못된 입력입니다. 숫자를 입력해주세요.");
+            sc.nextLine();
+            return;
         }
+        
+        if (seatNumber == 0) {
+            return;
+        }
+        
+        if ((seatType.equals("A") && (seatNumber < 1 || seatNumber > 8)) ||
+            (seatType.equals("B") && (seatNumber < 1 || seatNumber > 16))) {
+            System.out.println("해당 좌석은 존재하지 않습니다. 다시 입력해주세요.");
+            return;
+        } 
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             String checkSql = "SELECT reserved FROM seat_info WHERE type = ? AND seatnum = ?";
@@ -112,7 +128,6 @@ public class SeatReservationPage {
                     }
                 }
             }
-
             String updateSql = "UPDATE seat_info SET reserved = 1 WHERE type = ? AND seatnum = ?";
             try (PreparedStatement updatePstmt = conn.prepareStatement(updateSql)) {
                 updatePstmt.setString(1, seatType);
@@ -130,30 +145,11 @@ public class SeatReservationPage {
         int hours = sc.nextInt();
         int totalPrice = hours * pricePerHour;
         System.out.println("총 이용 금액은 " + totalPrice + "원입니다.");
-    }
-
-    public static void reserveStudyRoom() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("***** 스터디룸 예약 *****");
-        System.out.println("1. 3-4인실");
-        System.out.println("2. 5-6인실");
-        System.out.println("3. 8-10인실");
-        System.out.print("선택: ");
-        int choice = sc.nextInt();
-
-        switch (choice) {
-            case 1:
-                reserveSeat("3-4인실 스터디룸", 20000, 3);
-                break;
-            case 2:
-                reserveSeat("5-6인실 스터디룸", 35000, 3);
-                break;
-            case 3:
-                reserveSeat("8-10인실 스터디룸", 50000, 2);
-                break;
-            default:
-                System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
-        }
+        
+        PaymentSystem ps = new PaymentSystem(totalPrice);
+        
+        ps.pay();
+       
     }
 
     public static void main(String[] args) {
